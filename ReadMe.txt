@@ -18,3 +18,5 @@ There are two menu options:
 - a rating
 - actors
 - movie prizes (if any)
+
+Note: The application is build for desktop size and does not include responsiveness required for smaller displays. 
