@@ -1,0 +1,148 @@
+console.log('Requestning movies from OMDb Movies API');
+const ACCESS_KEY = "YOUR KEY GOES HERE"; // My personal access key från OMDb Movies
+
+let latestQuery = "";
+let latestFetched = [];
+let favoriteMovies = [];
+//localStorage.clear(); //Used when we test things with localStorage content
+
+// DOM-referenser
+const formEl = document.getElementById("search-form");
+const inputEl = document.getElementById("search-input");
+const searchedContainerEl = document.getElementById("searched-container");
+
+initiatePage();
+
+formEl.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const query = inputEl.value.trim();
+    
+    if (query) {
+        fetchMovies(query);
+        // spara undan query ifall vi ska använda senaste sökningen med next/prev-knapparna
+        latestQuery = query;
+        inputEl.value = "";
+        console.log('Movies fetched');
+    }
+});
+
+function initiatePage(){
+    //If there is anything in localStorage, get it
+    if (localStorage.getItem('favos') != null) {
+        favoriteMovies = JSON.parse(localStorage.getItem("favos"));
+    }
+}
+
+async function fetchMovies(query) {
+    const endpoint = `http://www.omdbapi.com/?s=${query}&apikey=${ACCESS_KEY}`; //Request using a movie title
+    try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+            console.log('Something is wrong with the API fetch');
+            throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        displayImages(data.Search);
+        //The click events must be created AFTERWARDS (due to async call)
+        createClickEventsForAddToFavoriteButtons();
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+function displayImages(movies) {
+    console.log(movies);
+    // rendera ut bilderna till UI:t
+    searchedContainerEl.innerHTML = ""; // töm tidigare innehåll
+    // Show the new movies:
+    for (let index = 0; index < movies.length; index++) {
+        createNewMovieItem(index, movies[index]);
+        createDivContentsForFetched(index);
+        //Create add-click event for this button. All button clicks will add the movie to the favorites
+    }
+    console.log(latestFetched);
+};
+
+function createNewMovieItem(index, movie) {
+    latestFetched[index] = {
+        id: index,
+        imdb: movie.imdbID,
+        title: movie.Title,
+        poster: movie.Poster,
+        year: movie.Year,
+        actors: "", //Something to be filled in edit mode
+        rating: 0   //Something to be filled in edit mode. The rating should be from 1 to 5.
+    }
+    //console.log(latestFetched[index]);
+}
+
+function createDivContentsForFetched(id) {
+    //Create outer div
+    const outerDiv = document.createElement('div'); //Outer div element containing both poster and button 
+
+    //Create the 2 divs making up the movies we just fetched
+    createPosterDiv(outerDiv, latestFetched[id]);
+    createButtonDiv(id, outerDiv);
+    searchedContainerEl.appendChild(outerDiv);
+}
+
+function createPosterDiv(outerDiv, movie) {
+    const imgDiv = document.createElement('div');
+    imgDiv.classList.add('image-item');
+    imgDiv.innerHTML = `<img src="${movie.poster}" alt="${movie.title}">`;
+    outerDiv.appendChild(imgDiv);
+}
+
+function createButtonDiv(id, outerDiv) {
+    const btnDiv = document.createElement('div');
+    //Create click-event for this button
+    const addToFavoritesBtn = document.createElement('button');
+    addToFavoritesBtn.innerHTML = 'Add to favorites';
+    addToFavoritesBtn.setAttribute('id', 'add-id-' + id);
+    btnDiv.appendChild(addToFavoritesBtn);
+    outerDiv.appendChild(btnDiv);
+}
+
+function createClickEventsForAddToFavoriteButtons() {
+    console.log(latestFetched);
+    for (let index = 0; index < latestFetched.length; index++) {
+        createEventForAddToFavoriteButton(index);
+    }
+}
+function createEventForAddToFavoriteButton(id) {
+    const addToFavBtn = document.getElementById('add-id-' + id);
+    addToFavBtn.addEventListener('click', (event) => {
+        //We add the item to favorites, but only if it was not added previously
+        if (favoriteMovies.length==0) {
+            addMovieToFavorites(id);
+        }
+        else{
+            if (!alreadyInFavorites(latestFetched[id])) {
+                addMovieToFavorites(id);
+            }
+        }
+    });
+}
+
+function alreadyInFavorites(movie){
+    for (let index = 0; index < favoriteMovies.length; index++) {
+        if (favoriteMovies[index].imdb == movie.imdb) {
+            console.log('Already there');
+            return true;
+        }
+        
+    }
+    console.log('Movie added');
+    return false;
+}
+
+function addMovieToFavorites(index){
+    //We need to add the movie to our list and the update the localStorage
+
+    favoriteMovies.push(latestFetched[index]);
+    //console.log(favoriteMovies);
+    localStorage.setItem('favos', JSON.stringify(favoriteMovies));
+    console.log(localStorage);
+}

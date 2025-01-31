@@ -1,0 +1,85 @@
+section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.image-item img {
+    width: 14vw;
+    height: auto;
+}
+
+.page-buttons {
+    margin-top: 15px;
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+.favoListContainer {
+    display: flex;
+    align-content: center;
+    margin-left: 10px;
+    width: 90vw;
+}
+
+.elementRow {
+    display: flex;
+    padding-left: 3px;
+    padding-right: 3px;
+    background-color: rgb(151, 211, 211);
+    font-size: 0.9rem;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+  }
+
+.elementRow>p {
+    padding-left: 10px;
+    width: 80vw;
+    height: 2.85rem;
+}
+.elementRow img {
+    padding-top: 2px;
+    padding-left: px;
+    width: 24px;
+    height: auto;
+  }
+  .img-thumbs img {
+    padding-top: 2px;
+    padding-left: px;
+    width: 70px;
+    height: auto;
+  }
+
+
+  #clearAll {
+    width: 10vw;
+    margin-top: 10px;
+    height: 1.3rem;
+  }

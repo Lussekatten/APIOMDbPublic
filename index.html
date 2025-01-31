@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="omdb-api.js" defer></script>
+    <link rel="stylesheet" href="my-style.css">
+</head>
+
+<body>
+    <ul>
+        <li><a class="active" href="./index.html">Search movies</a></li>
+        <li><a href="./favorites.html">Your favorites</a></li>
+        </ul>
+    <header>
+        <h1>OMDb API demo</h1>
+    </header>
+    <main>
+        <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search movies by title..." required />
+            <button type="submit">Search</button>
+        </form>
+        <section id="searched-container">
+            <!--Your movies will appear here (if anything is found)-->
+        </section>
+    </main>
+</body>
+
+</html>
