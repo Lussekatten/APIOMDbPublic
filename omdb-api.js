@@ -1,4 +1,3 @@
-console.log('Requestning movies from OMDb Movies API');
 const ACCESS_KEY = "YOUR KEY GOES HERE"; // My personal access key från OMDb Movies
 
 let latestQuery = "";
@@ -23,7 +22,6 @@ formEl.addEventListener("submit", (event) => {
         // spara undan query ifall vi ska använda senaste sökningen med next/prev-knapparna
         latestQuery = query;
         inputEl.value = "";
-        console.log('Movies fetched');
     }
 });
 
@@ -121,9 +119,17 @@ function createEventForAddToFavoriteButton(id) {
         else{
             if (!alreadyInFavorites(latestFetched[id])) {
                 addMovieToFavorites(id);
+                reIndexFavoritesListItems(); //A re-indexing seems necessary
             }
         }
     });
+}
+
+function reIndexFavoritesListItems() {
+    for (let index = 0; index < favoriteMovies.length; index++) {
+        favoriteMovies[index].id = index;
+    }
+    localStorage.setItem('favos', JSON.stringify(favoriteMovies))
 }
 
 function alreadyInFavorites(movie){
@@ -139,7 +145,7 @@ function alreadyInFavorites(movie){
 }
 
 function addMovieToFavorites(index){
-    //We need to add the movie to our list and the update the localStorage
+    //We need to add the movie to our list and then update the localStorage
 
     favoriteMovies.push(latestFetched[index]);
     //console.log(favoriteMovies);

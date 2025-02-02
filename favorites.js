@@ -10,6 +10,8 @@ function initiatePage() {
         favoriteMovies = JSON.parse(localStorage.getItem("favos"));
     }
     buildFavoritesListStructure();
+    createClickEventsForDeleteButtons();
+    createClickEventsForEditButtons();
 }
 
 function buildFavoritesListStructure() {
@@ -23,7 +25,7 @@ function buildFavoritesListStructure() {
         return;
     }
     for (let index = 0; index < favoriteMovies.length; index++) {
-        
+
         //We need to build the HTML nodes for every movie in our favorites list
         let newDivTag = document.createElement('div');
         newDivTag.setAttribute('class', 'elementRow');
@@ -32,7 +34,7 @@ function buildFavoritesListStructure() {
     }
 }
 
-function createListRowContents(id, myDiv){
+function createListRowContents(id, myDiv) {
     createEditButton(id, myDiv);
     createMovieThumbnailImg(id, myDiv);
     createMovieInfo(id, myDiv);
@@ -49,10 +51,10 @@ function createDeleteButton(id, myDiv) {
 
 function createEditButton(id, myDiv) {
     //This is the delete button
-    const delBtn = document.createElement('button');
-    delBtn.innerHTML = '<img src="./images/edit-button.png">';
-    delBtn.setAttribute('id', 'edit-id-' + id);
-    myDiv.appendChild(delBtn);
+    const editBtn = document.createElement('button');
+    editBtn.innerHTML = '<img src="./images/edit-button.png">';
+    editBtn.setAttribute('id', 'edit-id-' + id);
+    myDiv.appendChild(editBtn);
 }
 function createMovieInfo(id, myDiv) {
     //This is the delete button
@@ -63,9 +65,9 @@ function createMovieInfo(id, myDiv) {
     myDiv.appendChild(infoEl);
 }
 
-function createMovieThumbnailImg(id, myDiv){
+function createMovieThumbnailImg(id, myDiv) {
     const thumbDiv = document.createElement('div');
-    thumbDiv.setAttribute('class','img-thumbs');
+    thumbDiv.setAttribute('class', 'img-thumbs');
     const thumbImg = document.createElement('img');
     thumbImg.setAttribute('src', favoriteMovies[id].poster);
     thumbImg.setAttribute('alt', 'Movie poster');
@@ -73,17 +75,14 @@ function createMovieThumbnailImg(id, myDiv){
     myDiv.appendChild(thumbDiv);
 }
 
-function createClickEventsForDeleteButtons() {
-    for (let index = 0; index < favoriteMovies.length; index++) {
-        createClickEventForDelete(index);
-    }
-}
 function removeFavoriteListElement(index) {
     if (index > -1) { // only splice array when item is found
+        console.log(favoriteMovies);
         favoriteMovies.splice(index, 1); // 2nd parameter means remove one item only
         reIndexFavoritesListItems();
+        console.log(favoriteMovies);
         //Update the localStorage
-        localStorage.setItem('favos', JSON.stringify(favoriteMovies))
+        
         //Show the new contents of our list
         updateStatus();
     }
@@ -92,6 +91,7 @@ function reIndexFavoritesListItems() {
     for (let index = 0; index < favoriteMovies.length; index++) {
         favoriteMovies[index].id = index;
     }
+    localStorage.setItem('favos', JSON.stringify(favoriteMovies))
 }
 function updateStatus() {
     //We call the function every time we add or remove an item from the list.
@@ -118,6 +118,24 @@ function createClickEventForDelete(id) {
         removeFavoriteListElement(id);
     });
 }
-createClickEventsForDeleteButtons();
+function createClickEventForEdit(id) {
+    const editButton = document.getElementById('edit-id-' + id);
+    editButton.addEventListener('click', (event) => {
+        //Remove tyhe corresponding item from the bucketListArr;
+        window.location.href = `/editMovie.html?id=${encodeURIComponent(favoriteMovies[id].id)}`;
+    });
+}
+function createClickEventsForDeleteButtons() {
+    for (let index = 0; index < favoriteMovies.length; index++) {
+        createClickEventForDelete(index);
+    }
+}
+
+function createClickEventsForEditButtons() {
+    for (let index = 0; index < favoriteMovies.length; index++) {
+        createClickEventForEdit(index);
+    }
+}
+
 
 // -----------------------  Event listener(s) - end -------------------------
