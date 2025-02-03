@@ -77,11 +77,8 @@ function createMovieThumbnailImg(id, myDiv) {
 
 function removeFavoriteListElement(index) {
     if (index > -1) { // only splice array when item is found
-        console.log(favoriteMovies);
         favoriteMovies.splice(index, 1); // 2nd parameter means remove one item only
         reIndexFavoritesListItems();
-        console.log(favoriteMovies);
-        //Update the localStorage
         
         //Show the new contents of our list
         updateStatus();
@@ -104,18 +101,21 @@ function updateStatus() {
 }
 // -----------------------  Event listener(s) - start -------------------------
 clearAll.addEventListener('click', (event) => {
-    localStorage.clear();
-    favoriteMovies = [];
-    buildFavoritesListStructure();
+    if (confirm("You are about to delete ALL your favorites")) {
+        localStorage.clear();
+        favoriteMovies = [];
+        buildFavoritesListStructure();
+    }
 });
 function createClickEventForDelete(id) {
     const delButton = document.getElementById('del-id-' + id);
     delButton.addEventListener('click', (event) => {
-        //Remove tyhe corresponding item from the bucketListArr;
-
-        //We will also need to re-index the list elements after the removed item,
-        //as well as recreate the button events (to be in sync)
-        removeFavoriteListElement(id);
+        if (confirm("Is it really ok to delete this item?")) {
+            //Remove the corresponding item;
+            //We will also need to re-index the list elements after the removed item,
+            //as well as recreate the button events (to be in sync)
+            removeFavoriteListElement(id);
+          }
     });
 }
 function createClickEventForEdit(id) {
@@ -136,6 +136,5 @@ function createClickEventsForEditButtons() {
         createClickEventForEdit(index);
     }
 }
-
 
 // -----------------------  Event listener(s) - end -------------------------
