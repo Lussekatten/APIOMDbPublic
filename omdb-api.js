@@ -68,10 +68,11 @@ function createNewMovieItem(index, movie) {
         id: index,
         imdb: movie.imdbID,
         title: movie.Title,
+        genre: "", //Something to be filled in edit mode
         poster: movie.Poster,
         year: movie.Year,
         actors: "", //Something to be filled in edit mode
-        rating: 0   //Something to be filled in edit mode. The rating should be from 1 to 5.
+        rating: 4   //No movies will be selected in the favorites unless they have at least a rating of 4 (out of 5).
     }
     //console.log(latestFetched[index]);
 }
