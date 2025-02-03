@@ -2,39 +2,35 @@ let moviesFromLS = [];
 let currentMovie = {};
 
 function onPageLoad() {
-    // ta emot parametern från vår url
+    // Read the url parameters
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
-    console.log(id);
-    // hämta filmerna från LS
+    // Read the LS
     moviesFromLS = JSON.parse(localStorage.getItem('favos'));
     // spara undan filmen vi är på i den globala variabeln currentMovie
     currentMovie = moviesFromLS.find((element) => element.id == id); //Creates problems with ===
-    renderMovieToUI();
+    renderMovieDataToUI();
 };
 onPageLoad();
 
-function renderMovieToUI() {
-    // skriva ut bilden på sidan
-    console.log(currentMovie);
+function renderMovieDataToUI() {
     const movieImageEl = document.getElementById('movie-image');
     movieImageEl.setAttribute("src", currentMovie.poster);
     movieImageEl.setAttribute("alt", `Movie poster of ${currentMovie.title}`);
     document.getElementById("header-title").innerText = currentMovie.title;
-    document.getElementById("actors").innerText = currentMovie.description;
+    document.getElementById("genre").value = currentMovie.genre;
+    document.getElementById("actors").value = currentMovie.actors;
+    document.getElementById("movie-rating-select").value = currentMovie.rating;
 };
 
 const chosenGenre = document.getElementById('genre');
 chosenGenre.addEventListener('change', (event) => {
-    console.log(event.target.value);
 });
 const chosenCast = document.getElementById('actors');
 chosenCast.addEventListener('change', (event) => {
-    console.log(event.target.value);
 });
 const chosenRating = document.getElementById('movie-rating-select');
 chosenRating.addEventListener('change', (event) => {
-    console.log(event.target.value);
 });
 editMovieForm.addEventListener('submit', (event) => {
     event.preventDefault(); // förhindrar att sidan laddas om
@@ -42,7 +38,7 @@ editMovieForm.addEventListener('submit', (event) => {
     moviesFromLS[currentMovie.id].genre = chosenGenre.value;
     moviesFromLS[currentMovie.id].actors = chosenCast.value;
     moviesFromLS[currentMovie.id].rating = chosenRating.value;
-    //console.log(moviesFromLS[currentMovie.id]);
+
     //2. Save the data
     localStorage.setItem('favos', JSON.stringify(moviesFromLS));
 
