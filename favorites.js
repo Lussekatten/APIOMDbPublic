@@ -60,7 +60,8 @@ function createMovieInfo(id, myDiv) {
     //This is the delete button
     const infoEl = document.createElement('p');
     infoEl.innerHTML = `<strong>Title: </strong> ${favoriteMovies[id].title}<br>
-    <strong>Actors: </strong> ${favoriteMovies[id].actors}<br>
+    <strong>Genre: </strong> ${favoriteMovies[id].genre}<br>
+    <strong>Cast: </strong> ${favoriteMovies[id].actors}<br>
     <strong>Rating: </strong> ${favoriteMovies[id].rating}<br>`;
     myDiv.appendChild(infoEl);
 }

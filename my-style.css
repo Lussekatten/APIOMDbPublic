@@ -77,9 +77,24 @@ li a:hover {
     height: auto;
   }
 
-
   #clearAll {
     width: 10vw;
     margin-top: 10px;
     height: 1.3rem;
+  }
+
+  .main-wrapper{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .edit-right-side{
+    display: flex;
+    flex-direction: column;
+  }
+
+  form button{
+    margin-top: 10px;
   }
