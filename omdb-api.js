@@ -37,11 +37,9 @@ async function fetchMovies(query) {
     try {
         const response = await fetch(endpoint);
         if (!response.ok) {
-            console.log('Something is wrong with the API fetch');
             throw new Error(`Error: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         displayImages(data.Search);
         //The click events must be created AFTERWARDS (due to async call)
         createClickEventsForAddToFavoriteButtons();
@@ -51,7 +49,6 @@ async function fetchMovies(query) {
 };
 
 function displayImages(movies) {
-    console.log(movies);
     // rendera ut bilderna till UI:t
     searchedContainerEl.innerHTML = ""; // töm tidigare innehåll
     // Show the new movies:
@@ -60,7 +57,6 @@ function displayImages(movies) {
         createDivContentsForFetched(index);
         //Create add-click event for this button. All button clicks will add the movie to the favorites
     }
-    console.log(latestFetched);
 };
 
 function createNewMovieItem(index, movie) {
@@ -74,7 +70,6 @@ function createNewMovieItem(index, movie) {
         actors: "", //Something to be filled in edit mode
         rating: 4   //No movies will be selected in the favorites unless they have at least a rating of 4 (out of 5).
     }
-    //console.log(latestFetched[index]);
 }
 
 function createDivContentsForFetched(id) {
@@ -105,7 +100,6 @@ function createButtonDiv(id, outerDiv) {
 }
 
 function createClickEventsForAddToFavoriteButtons() {
-    console.log(latestFetched);
     for (let index = 0; index < latestFetched.length; index++) {
         createEventForAddToFavoriteButton(index);
     }
@@ -136,20 +130,15 @@ function reIndexFavoritesListItems() {
 function alreadyInFavorites(movie){
     for (let index = 0; index < favoriteMovies.length; index++) {
         if (favoriteMovies[index].imdb == movie.imdb) {
-            console.log('Already there');
             return true;
         }
         
     }
-    console.log('Movie added');
     return false;
 }
 
 function addMovieToFavorites(index){
     //We need to add the movie to our list and then update the localStorage
-
     favoriteMovies.push(latestFetched[index]);
-    //console.log(favoriteMovies);
     localStorage.setItem('favos', JSON.stringify(favoriteMovies));
-    console.log(localStorage);
 }
